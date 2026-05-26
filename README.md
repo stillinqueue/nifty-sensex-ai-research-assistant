@@ -48,6 +48,16 @@ Primary market universe:
 
 The project does not attempt to analyze every listed Indian stock in the first version.
 
+The tracked universe is configured in:
+
+```text
+config/market_universe.yaml
+```
+
+The universe includes symbols, NSE/BSE mappings, sectors, index membership, provider quote keys, and placeholder instrument tokens.
+
+Index membership and instrument identifiers should be refreshed and validated against Zerodha instrument master, NSE official data, BSE official data, or licensed vendor data before production use.
+
 ---
 
 ## Production Data Policy
@@ -115,6 +125,8 @@ Zerodha Kite / NSE / BSE / Groww
         ↓
 Provider Abstraction Layer
         ↓
+Instrument Master + Market Universe
+        ↓
 Raw Market Data Store
         ↓
 Data Quality Validation
@@ -140,25 +152,101 @@ Monitoring, Logging, Guardrails
 
 ### 1. Provider Abstraction Layer
 
-The system is designed with a clean data-provider interface so that different production data sources can be plugged in without rewriting the full pipeline.
+The system uses a clean market-data-provider interface so different production data sources can be plugged in without rewriting the pipeline.
 
-Planned providers:
+Current provider targets:
 
 - Zerodha Kite Connect
 - Groww API
 - NSE/BSE licensed data provider
 
-The provider layer will support:
+Core files:
+
+```text
+src/market_data_provider.py
+src/provider_factory.py
+src/zerodha_client.py
+src/groww_client.py
+src/nse_bse_data_client.py
+```
+
+The provider layer supports:
 
 - Historical OHLCV candles
-- Live quotes
+- Latest quotes
+- Batch quotes
 - Instrument metadata
-- Index and stock universe mapping
 - Source timestamps
+
+Current implementation status:
+
+| Provider | Status |
+|---|---|
+| Zerodha Kite Connect | Initial read-only implementation |
+| Groww API | Placeholder pending endpoint contract |
+| NSE/BSE licensed data | Placeholder pending vendor selection |
+
+The first implementation is read-only and does not place trades.
 
 ---
 
-### 2. Raw Market Data Store
+### 2. Zerodha Kite Connect Integration
+
+The first production provider implementation is:
+
+```text
+src/zerodha_client.py
+```
+
+It supports:
+
+- Instrument master download
+- Historical OHLCV candle retrieval
+- Latest quote retrieval
+- Batch quote retrieval
+
+Zerodha historical data requires an `instrument_token`, which should be mapped from the Zerodha instrument master.
+
+The setup guide is documented in:
+
+```text
+docs/zerodha_kite_setup.md
+```
+
+---
+
+### 3. Market Universe and Instrument Master
+
+The market universe is configured in:
+
+```text
+config/market_universe.yaml
+```
+
+The helper utilities are implemented in:
+
+```text
+src/instrument_master.py
+```
+
+The instrument master utilities support:
+
+- Loading the configured market universe
+- Converting stocks and indices to DataFrames
+- Exporting reference files
+- Finding stocks by symbol
+- Enriching the configured universe with Zerodha instrument tokens
+
+Expected reference outputs:
+
+```text
+data/reference/stock_universe.csv
+data/reference/index_universe.csv
+```
+
+---
+
+### 4. Raw Market Data Store
 
 Raw provider data is stored before transformation.
 
@@ -179,7 +267,7 @@ Example raw data categories:
 
 ---
 
-### 3. Data Quality Validation
+### 5. Data Quality Validation
 
 The project validates market data before feature engineering.
 
@@ -197,7 +285,7 @@ Planned checks:
 
 ---
 
-### 4. Feature Engineering
+### 6. Feature Engineering
 
 The system generates technical and market-relative features such as:
 
@@ -219,7 +307,7 @@ These features are used for forecasting, ranking, and research-document generati
 
 ---
 
-### 5. 18-Month Forecasting Model
+### 7. 18-Month Forecasting Model
 
 The forecasting layer predicts a directional 18-month research outlook.
 
@@ -252,7 +340,7 @@ Thresholds may be adjusted during model evaluation.
 
 ---
 
-### 6. Backtesting and Model Evaluation
+### 8. Backtesting and Model Evaluation
 
 The project will evaluate whether forecast signals were historically useful.
 
@@ -272,7 +360,7 @@ The goal is not to prove perfect prediction, but to measure whether the research
 
 ---
 
-### 7. Research Document Generation
+### 9. Research Document Generation
 
 Structured market analytics are converted into natural-language research documents.
 
@@ -316,7 +404,7 @@ YYYY-MM-DD HH:MM:SS
 
 ---
 
-### 8. RAG and Vector Search
+### 10. RAG and Vector Search
 
 The assistant uses Retrieval-Augmented Generation to ground its answers.
 
@@ -342,7 +430,7 @@ The architecture can later be migrated to a managed vector database or Databrick
 
 ---
 
-### 9. LLM-Based Q&A Assistant
+### 11. LLM-Based Q&A Assistant
 
 The chatbot answers questions using only retrieved market context and model outputs.
 
@@ -360,7 +448,7 @@ The assistant should avoid unsupported claims and should not answer from memory 
 
 ---
 
-### 10. Evaluation and Guardrails
+### 12. Evaluation and Guardrails
 
 The assistant will be evaluated for:
 
@@ -410,6 +498,7 @@ nifty-sensex-ai-research-assistant/
 ├── src/
 │   ├── config.py
 │   ├── market_data_provider.py
+│   ├── provider_factory.py
 │   ├── zerodha_client.py
 │   ├── groww_client.py
 │   ├── nse_bse_data_client.py
@@ -440,7 +529,11 @@ nifty-sensex-ai-research-assistant/
 ├── docs/
 │   ├── architecture.md
 │   ├── production_data_strategy.md
+│   ├── provider_architecture.md
+│   ├── zerodha_kite_setup.md
+│   ├── market_universe.md
 │   ├── data_sources.md
+│   ├── data_ingestion.md
 │   ├── data_quality_rules.md
 │   ├── forecasting_methodology.md
 │   ├── model_risk_management.md
@@ -452,6 +545,9 @@ nifty-sensex-ai-research-assistant/
 │   ├── architecture_diagram.png
 │   ├── forecast_example.png
 │   └── chatbot_example.png
+│
+├── logs/
+├── models/
 │
 └── tests/
     ├── test_data_validation.py
@@ -578,7 +674,9 @@ Then fill in the required API keys and access tokens.
 
 ## Current Status
 
-Phase 1: Production repo reset in progress.
+Phase 1: Production repo reset complete.
+
+Phase 2: Production market data foundation in progress.
 
 Completed:
 
@@ -586,14 +684,27 @@ Completed:
 - Initial project structure added
 - Production-only data strategy defined
 - Production data provider scope selected
+- Environment template updated for Zerodha, Groww, NSE/BSE, and OpenAI
+- Application configuration module added
+- Market data provider interface added
+- Zerodha Kite Connect read-only provider added
+- Groww provider placeholder added
+- NSE/BSE licensed data provider placeholder added
+- Provider factory added
+- Provider architecture documentation added
+- Zerodha setup documentation added
+- Market universe configuration added
+- Instrument master utilities added
+- Market universe documentation added
 
 Next:
 
-- Add production configuration layer
-- Add market data provider interface
-- Add Zerodha Kite Connect client
-- Add Groww client placeholder
-- Add NSE/BSE licensed data client placeholder
+- Add market data ingestion layer
+- Add ingestion documentation
+- Create first ingestion notebook or notebook-style Python script
+- Download and store Zerodha instrument master
+- Export stock and index universe reference files
+- Map configured stocks to Zerodha instrument tokens
 
 ---
 
