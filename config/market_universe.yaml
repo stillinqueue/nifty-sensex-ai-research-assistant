@@ -1,0 +1,354 @@
+project:
+  name: nifty-sensex-ai-research-assistant
+  market: India
+  scope:
+    - NIFTY_50
+    - SENSEX
+    - NIFTY_50_CONSTITUENTS
+    - SENSEX_CONSTITUENTS
+
+indices:
+  - index_name: NIFTY_50
+    exchange: NSE
+    trading_symbol: "NIFTY 50"
+    provider_symbol: "NSE:NIFTY 50"
+    instrument_token: null
+    description: "NIFTY 50 benchmark index"
+
+  - index_name: SENSEX
+    exchange: BSE
+    trading_symbol: "SENSEX"
+    provider_symbol: "BSE:SENSEX"
+    instrument_token: null
+    description: "BSE SENSEX benchmark index"
+
+stocks:
+  - company_name: Reliance Industries Ltd
+    symbol: RELIANCE
+    nse_symbol: RELIANCE
+    bse_symbol: RELIANCE
+    sector: Energy / Conglomerate
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: NSE:RELIANCE
+    instrument_token: null
+
+  - company_name: Tata Consultancy Services Ltd
+    symbol: TCS
+    nse_symbol: TCS
+    bse_symbol: TCS
+    sector: Information Technology
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: NSE:TCS
+    instrument_token: null
+
+  - company_name: Infosys Ltd
+    symbol: INFY
+    nse_symbol: INFY
+    bse_symbol: INFY
+    sector: Information Technology
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: NSE:INFY
+    instrument_token: null
+
+  - company_name: HDFC Bank Ltd
+    symbol: HDFCBANK
+    nse_symbol: HDFCBANK
+    bse_symbol: HDFCBANK
+    sector: Banking
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: NSE:HDFCBANK
+    instrument_token: null
+
+  - company_name: ICICI Bank Ltd
+    symbol: ICICIBANK
+    nse_symbol: ICICIBANK
+    bse_symbol: ICICIBANK
+    sector: Banking
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: NSE:ICICIBANK
+    instrument_token: null
+
+  - company_name: State Bank of India
+    symbol: SBIN
+    nse_symbol: SBIN
+    bse_symbol: SBIN
+    sector: Banking
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: NSE:SBIN
+    instrument_token: null
+
+  - company_name: Larsen & Toubro Ltd
+    symbol: LT
+    nse_symbol: LT
+    bse_symbol: LT
+    sector: Engineering / Infrastructure
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: NSE:LT
+    instrument_token: null
+
+  - company_name: Axis Bank Ltd
+    symbol: AXISBANK
+    nse_symbol: AXISBANK
+    bse_symbol: AXISBANK
+    sector: Banking
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: NSE:AXISBANK
+    instrument_token: null
+
+  - company_name: Bharti Airtel Ltd
+    symbol: BHARTIARTL
+    nse_symbol: BHARTIARTL
+    bse_symbol: BHARTIARTL
+    sector: Telecom
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: NSE:BHARTIARTL
+    instrument_token: null
+
+  - company_name: ITC Ltd
+    symbol: ITC
+    nse_symbol: ITC
+    bse_symbol: ITC
+    sector: FMCG
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: NSE:ITC
+    instrument_token: null
+
+  - company_name: Tata Motors Ltd
+    symbol: TATAMOTORS
+    nse_symbol: TATAMOTORS
+    bse_symbol: TATAMOTORS
+    sector: Automobile
+    index_membership:
+      - NIFTY_50
+    zerodha_quote_key: NSE:TATAMOTORS
+    instrument_token: null
+
+  - company_name: Maruti Suzuki India Ltd
+    symbol: MARUTI
+    nse_symbol: MARUTI
+    bse_symbol: MARUTI
+    sector: Automobile
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: NSE:MARUTI
+    instrument_token: null
+
+  - company_name: Sun Pharmaceutical Industries Ltd
+    symbol: SUNPHARMA
+    nse_symbol: SUNPHARMA
+    bse_symbol: SUNPHARMA
+    sector: Pharmaceuticals
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: NSE:SUNPHARMA
+    instrument_token: null
+
+  - company_name: Hindustan Unilever Ltd
+    symbol: HINDUNILVR
+    nse_symbol: HINDUNILVR
+    bse_symbol: HINDUNILVR
+    sector: FMCG
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: NSE:HINDUNILVR
+    instrument_token: null
+
+  - company_name: Kotak Mahindra Bank Ltd
+    symbol: KOTAKBANK
+    nse_symbol: KOTAKBANK
+    bse_symbol: KOTAKBANK
+    sector: Banking
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: NSE:KOTAKBANK
+    instrument_token: null
+
+  - company_name: HCL Technologies Ltd
+    symbol: HCLTECH
+    nse_symbol: HCLTECH
+    bse_symbol: HCLTECH
+    sector: Information Technology
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: NSE:HCLTECH
+    instrument_token: null
+
+  - company_name: Tech Mahindra Ltd
+    symbol: TECHM
+    nse_symbol: TECHM
+    bse_symbol: TECHM
+    sector: Information Technology
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: NSE:TECHM
+    instrument_token: null
+
+  - company_name: Mahindra & Mahindra Ltd
+    symbol: M&M
+    nse_symbol: M&M
+    bse_symbol: M&M
+    sector: Automobile
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: "NSE:M&M"
+    instrument_token: null
+
+  - company_name: Titan Company Ltd
+    symbol: TITAN
+    nse_symbol: TITAN
+    bse_symbol: TITAN
+    sector: Consumer Discretionary
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: NSE:TITAN
+    instrument_token: null
+
+  - company_name: Asian Paints Ltd
+    symbol: ASIANPAINT
+    nse_symbol: ASIANPAINT
+    bse_symbol: ASIANPAINT
+    sector: Consumer Goods
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: NSE:ASIANPAINT
+    instrument_token: null
+
+  - company_name: Bajaj Finance Ltd
+    symbol: BAJFINANCE
+    nse_symbol: BAJFINANCE
+    bse_symbol: BAJFINANCE
+    sector: Financial Services
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: NSE:BAJFINANCE
+    instrument_token: null
+
+  - company_name: Bajaj Finserv Ltd
+    symbol: BAJAJFINSV
+    nse_symbol: BAJAJFINSV
+    bse_symbol: BAJAJFINSV
+    sector: Financial Services
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: NSE:BAJAJFINSV
+    instrument_token: null
+
+  - company_name: UltraTech Cement Ltd
+    symbol: ULTRACEMCO
+    nse_symbol: ULTRACEMCO
+    bse_symbol: ULTRACEMCO
+    sector: Cement
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: NSE:ULTRACEMCO
+    instrument_token: null
+
+  - company_name: NTPC Ltd
+    symbol: NTPC
+    nse_symbol: NTPC
+    bse_symbol: NTPC
+    sector: Power
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: NSE:NTPC
+    instrument_token: null
+
+  - company_name: Power Grid Corporation of India Ltd
+    symbol: POWERGRID
+    nse_symbol: POWERGRID
+    bse_symbol: POWERGRID
+    sector: Power
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: NSE:POWERGRID
+    instrument_token: null
+
+  - company_name: Tata Steel Ltd
+    symbol: TATASTEEL
+    nse_symbol: TATASTEEL
+    bse_symbol: TATASTEEL
+    sector: Metals
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: NSE:TATASTEEL
+    instrument_token: null
+
+  - company_name: Adani Ports and Special Economic Zone Ltd
+    symbol: ADANIPORTS
+    nse_symbol: ADANIPORTS
+    bse_symbol: ADANIPORTS
+    sector: Ports / Infrastructure
+    index_membership:
+      - NIFTY_50
+      - SENSEX
+    zerodha_quote_key: NSE:ADANIPORTS
+    instrument_token: null
+
+  - company_name: Bharat Electronics Ltd
+    symbol: BEL
+    nse_symbol: BEL
+    bse_symbol: BEL
+    sector: Defence Electronics
+    index_membership:
+      - SENSEX
+    zerodha_quote_key: NSE:BEL
+    instrument_token: null
+
+  - company_name: Trent Ltd
+    symbol: TRENT
+    nse_symbol: TRENT
+    bse_symbol: TRENT
+    sector: Retail
+    index_membership:
+      - SENSEX
+    zerodha_quote_key: NSE:TRENT
+    instrument_token: null
+
+  - company_name: InterGlobe Aviation Ltd
+    symbol: INDIGO
+    nse_symbol: INDIGO
+    bse_symbol: INDIGO
+    sector: Aviation
+    index_membership:
+      - SENSEX
+    zerodha_quote_key: NSE:INDIGO
+    instrument_token: null
+
+metadata:
+  source_policy: "Production mode should refresh symbols and instrument tokens from Zerodha instrument master and official NSE/BSE sources."
+  note: "This YAML is a starter universe. Index constituents should be validated before production use."
