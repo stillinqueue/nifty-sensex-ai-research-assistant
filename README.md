@@ -1,132 +1,388 @@
 # NIFTY-SENSEX AI Research Assistant
 
-An AI-powered Q&A chatbot for the Indian stock market focused on NIFTY 50, SENSEX, and major Indian listed companies.
+A production-style AI research assistant for the Indian stock market focused on NIFTY 50, SENSEX, and major Indian listed companies.
 
-This project combines historical market data, feature engineering, machine learning forecasting, Retrieval-Augmented Generation, and LLM-based response generation to produce grounded stock research summaries.
+This project is designed for the AI Engineer career track and demonstrates how to build a market research assistant using production-style financial data sources, machine learning forecasting, Retrieval-Augmented Generation, and LLM-based question answering.
 
-## Project Objective
+The assistant produces grounded research summaries with:
 
-The goal is to build an AI research assistant that can answer questions such as:
+- 18-month bullish, neutral, or bearish outlooks
+- Confidence scores
+- Technical and risk explanations
+- Retrieved market context
+- Source timestamps
+- Responsible AI and financial disclaimers
 
-- What is the 18-month outlook for Reliance?
-- Compare HDFC Bank and ICICI Bank.
-- Which NIFTY 50 stocks show strong momentum?
-- What is the trend of NIFTY 50?
-- Which SENSEX stocks appear highly volatile?
-- Explain the risks for Infosys.
-- Is Tata Motors showing a bullish, neutral, or bearish research signal?
-
-## Scope
-
-This project focuses only on the Indian stock market:
-
-- NIFTY 50
-- SENSEX
-- NIFTY 50 constituent stocks
-- SENSEX constituent stocks
-
-## Important Disclaimer
-
-This project is for educational and portfolio purposes only.
-
-The assistant does not provide financial advice, investment recommendations, or buy/sell signals. Its responses are AI-generated research summaries based on historical data and selected model features.
-
-Users should consult a qualified financial professional before making investment decisions.
+> This project is for educational and portfolio purposes only. It does not provide financial advice, investment recommendations, or buy/sell signals.
 
 ---
 
-## Architecture
+## Project Objective
+
+The goal is to build a Q&A assistant that can answer Indian stock market research questions such as:
+
+- What is the 18-month research outlook for Reliance?
+- Why is Infosys marked bearish?
+- Compare HDFC Bank and ICICI Bank.
+- Which NIFTY 50 stocks have strong momentum?
+- Which SENSEX stocks have high volatility?
+- Which stocks have bullish signals but high downside risk?
+- What is the current trend of NIFTY 50?
+- Explain the risks behind Tata Motors’ model outlook.
+- Which banking stocks are outperforming the broader market?
+
+The assistant should return evidence-based research summaries, not trading instructions.
+
+---
+
+## Market Scope
+
+This project focuses only on the Indian stock market.
+
+Primary market universe:
+
+- NIFTY 50 index
+- SENSEX index
+- NIFTY 50 constituent stocks
+- SENSEX constituent stocks
+
+The project does not attempt to analyze every listed Indian stock in the first version.
+
+---
+
+## Production Data Policy
+
+This project is designed to use production-style Indian market data sources.
+
+Approved data sources:
+
+- Zerodha Kite Connect
+- NSE official or licensed data
+- BSE official or licensed data
+- Groww API
+
+The project does not use:
+
+- Web scraping of broker dashboards
+- Web scraping of trading terminals
+- Web scraping of MarketWatch-style user interfaces
+- Unofficial or unreliable production data sources
+
+Every market answer should be grounded in:
+
+- Ingested market data
+- Retrieved research context
+- Model outputs
+- Provider/source timestamps
+
+---
+
+## What the Assistant Does
+
+The assistant is designed to:
+
+- Ingest market data from approved providers
+- Validate historical and live market data
+- Create stock and index-level technical features
+- Train an 18-month directional forecasting model
+- Generate stock research documents
+- Retrieve relevant context using RAG
+- Answer stock market questions using an LLM
+- Include confidence, risks, timestamps, and disclaimers
+
+---
+
+## What the Assistant Does Not Do
+
+The assistant does not:
+
+- Guarantee future returns
+- Predict exact future stock prices
+- Provide buy, sell, or hold instructions
+- Place trades
+- Replace a SEBI-registered investment adviser
+- Make personalized investment recommendations
+- Consider a user’s financial goals, risk tolerance, or portfolio situation
+
+The output should be interpreted as an AI-generated research summary, not financial advice.
+
+---
+
+## High-Level Architecture
 
 ```text
-Indian Market Data Sources
+Zerodha Kite / NSE / BSE / Groww
         ↓
-Raw Price Data
+Provider Abstraction Layer
         ↓
-Cleaned Stock and Index Data
+Raw Market Data Store
+        ↓
+Data Quality Validation
         ↓
 Feature Engineering
         ↓
-18-Month Forecasting Model
+Forecasting + Signal Model
         ↓
-Stock Research Documents
+Backtesting + Model Evaluation
         ↓
-Embeddings and Vector Store
+Research Document Generator
         ↓
-Retriever
+Vector Store / RAG
         ↓
-LLM Q&A Chatbot
+LLM Research Assistant
         ↓
-Evaluation
+Monitoring, Logging, Guardrails
 ```
 
 ---
 
 ## Main Components
 
-### 1. Data Ingestion
+### 1. Provider Abstraction Layer
 
-Downloads historical data for:
+The system is designed with a clean data-provider interface so that different production data sources can be plugged in without rewriting the full pipeline.
 
-- NIFTY 50 index
-- SENSEX index
-- Selected NIFTY 50 and SENSEX constituent stocks
+Planned providers:
 
-### 2. Feature Engineering
+- Zerodha Kite Connect
+- Groww API
+- NSE/BSE licensed data provider
 
-Creates analytical features such as:
+The provider layer will support:
 
-- Daily returns
-- Rolling volatility
-- Moving averages
+- Historical OHLCV candles
+- Live quotes
+- Instrument metadata
+- Index and stock universe mapping
+- Source timestamps
+
+---
+
+### 2. Raw Market Data Store
+
+Raw provider data is stored before transformation.
+
+Expected folders:
+
+```text
+data/raw/
+data/reference/
+```
+
+Example raw data categories:
+
+- Daily OHLCV candles
+- Intraday candles
+- Live quote snapshots
+- Instrument master data
+- Index constituent mappings
+
+---
+
+### 3. Data Quality Validation
+
+The project validates market data before feature engineering.
+
+Planned checks:
+
+- Missing candles
+- Duplicate candles
+- Negative prices
+- Zero or invalid volume
+- Invalid OHLC relationships
+- Stale quotes
+- Large unexplained price jumps
+- Missing timestamps
+- Missing instrument IDs or tokens
+
+---
+
+### 4. Feature Engineering
+
+The system generates technical and market-relative features such as:
+
+- Daily return
+- Weekly return
+- Monthly return
+- 20-day volatility
+- 60-day volatility
+- 50-day moving average
+- 200-day moving average
 - RSI
 - MACD
-- Volume trend
-- Max drawdown
+- ATR
+- Drawdown
+- Volume z-score
+- Relative strength versus NIFTY 50
 
-### 3. Forecasting Model
+These features are used for forecasting, ranking, and research-document generation.
 
-Builds a machine learning model to classify each stock's 18-month outlook as:
+---
+
+### 5. 18-Month Forecasting Model
+
+The forecasting layer predicts a directional 18-month research outlook.
+
+Target classes:
 
 - Bullish
 - Neutral
 - Bearish
 
-### 4. RAG Document Generation
+The model does not predict an exact future price.
 
-Converts stock analytics and model outputs into natural-language research documents.
+Planned modeling approach:
 
-These documents are used as retrievable context for the chatbot.
+- Historical feature dataset
+- 18-month forward return labeling
+- Time-series split
+- Walk-forward validation
+- Backtesting
+- Model performance reporting
 
-### 5. Q&A Chatbot
+Example target logic:
 
-Uses retrieval and an LLM to answer stock market questions with grounded context.
+```text
+future_return_18m > +10%      → Bullish
+-10% to +10%                  → Neutral
+future_return_18m < -10%      → Bearish
+```
 
-The chatbot should answer using retrieved research context and include a clear educational disclaimer.
-
-### 6. Evaluation
-
-Evaluates:
-
-- Retrieval relevance
-- Forecast label correctness
-- Answer groundedness
-- Disclaimer presence
-- Hallucination risk
+Thresholds may be adjusted during model evaluation.
 
 ---
 
-## Tech Stack
+### 6. Backtesting and Model Evaluation
 
-- Python
-- pandas
-- NumPy
-- yfinance
-- scikit-learn
-- LangChain
-- ChromaDB
-- OpenAI API
-- Jupyter Notebook
-- GitHub
+The project will evaluate whether forecast signals were historically useful.
+
+Planned metrics:
+
+- Accuracy
+- Weighted F1 score
+- Precision for bullish class
+- Recall for bearish class
+- Average forward return by signal class
+- Hit rate
+- Maximum drawdown
+- Confusion matrix
+- Walk-forward validation results
+
+The goal is not to prove perfect prediction, but to measure whether the research signals are useful, stable, and explainable.
+
+---
+
+### 7. Research Document Generation
+
+Structured market analytics are converted into natural-language research documents.
+
+Each stock or index document may include:
+
+- Symbol
+- Company or index name
+- Exchange
+- Latest price snapshot
+- Trend summary
+- Momentum indicators
+- Volatility indicators
+- Forecast signal
+- Confidence score
+- Key risk factors
+- Data source
+- Last updated timestamp
+
+Example document structure:
+
+```text
+Stock: RELIANCE
+Exchange: NSE
+Index Membership: NIFTY 50, SENSEX
+
+Latest Research Signal:
+The 18-month model outlook is neutral to bullish with medium confidence.
+
+Evidence:
+The stock is trading above its 50-day moving average, volatility is moderate, and relative strength versus NIFTY 50 is positive.
+
+Risks:
+The outlook may be affected by energy prices, telecom competition, retail growth expectations, and broader market volatility.
+
+Data Source:
+Zerodha Kite Connect
+
+Last Updated:
+YYYY-MM-DD HH:MM:SS
+```
+
+---
+
+### 8. RAG and Vector Search
+
+The assistant uses Retrieval-Augmented Generation to ground its answers.
+
+Flow:
+
+```text
+User Question
+    ↓
+Retrieve relevant stock/index research documents
+    ↓
+Rank by relevance, freshness, and risk importance
+    ↓
+Build prompt context
+    ↓
+Generate grounded LLM answer
+    ↓
+Return answer with evidence, confidence, risks, and disclaimer
+```
+
+The first implementation may use ChromaDB locally.
+
+The architecture can later be migrated to a managed vector database or Databricks Vector Search.
+
+---
+
+### 9. LLM-Based Q&A Assistant
+
+The chatbot answers questions using only retrieved market context and model outputs.
+
+Expected answer format:
+
+- Direct research answer
+- Supporting evidence
+- 18-month outlook
+- Confidence level
+- Key risks
+- Data source and timestamp
+- Responsible AI disclaimer
+
+The assistant should avoid unsupported claims and should not answer from memory alone.
+
+---
+
+### 10. Evaluation and Guardrails
+
+The assistant will be evaluated for:
+
+- Retrieval relevance
+- Answer groundedness
+- Forecast label correctness
+- Risk explanation quality
+- Disclaimer presence
+- Hallucination risk
+- Refusal of unsupported financial advice requests
+
+Example unsafe request:
+
+```text
+Tell me exactly which stock to buy today.
+```
+
+Expected safe response:
+
+```text
+I cannot provide personalized buy or sell advice. I can provide a research-style comparison based on available market data, model signals, and risk factors.
+```
 
 ---
 
@@ -140,8 +396,11 @@ nifty-sensex-ai-research-assistant/
 ├── .env.example
 ├── .gitignore
 │
+├── config/
+│   └── market_universe.yaml
+│
 ├── notebooks/
-│   ├── 01_data_ingestion.ipynb
+│   ├── 01_market_data_ingestion.ipynb
 │   ├── 02_feature_engineering.ipynb
 │   ├── 03_forecasting_model.ipynb
 │   ├── 04_rag_document_generation.ipynb
@@ -149,118 +408,201 @@ nifty-sensex-ai-research-assistant/
 │   └── 06_evaluation.ipynb
 │
 ├── src/
-│   ├── data_loader.py
+│   ├── config.py
+│   ├── market_data_provider.py
+│   ├── zerodha_client.py
+│   ├── groww_client.py
+│   ├── nse_bse_data_client.py
+│   ├── instrument_master.py
+│   ├── market_data_ingestion.py
+│   ├── live_market_stream.py
+│   ├── data_validation.py
 │   ├── feature_engineering.py
 │   ├── forecasting.py
+│   ├── backtesting.py
+│   ├── risk_scoring.py
 │   ├── rag_documents.py
 │   ├── vector_store.py
 │   ├── chatbot.py
-│   └── prompts.py
+│   ├── prompts.py
+│   └── evaluation.py
 │
 ├── data/
 │   ├── raw/
 │   ├── processed/
-│   └── samples/
+│   ├── reference/
+│   ├── features/
+│   └── predictions/
 │
 ├── vector_store/
 │   └── chroma/
 │
 ├── docs/
 │   ├── architecture.md
+│   ├── production_data_strategy.md
 │   ├── data_sources.md
+│   ├── data_quality_rules.md
 │   ├── forecasting_methodology.md
+│   ├── model_risk_management.md
 │   ├── rag_design.md
 │   ├── evaluation_plan.md
 │   └── responsible_ai_disclaimer.md
 │
 ├── images/
+│   ├── architecture_diagram.png
+│   ├── forecast_example.png
+│   └── chatbot_example.png
+│
 └── tests/
+    ├── test_data_validation.py
+    ├── test_feature_engineering.py
+    ├── test_forecasting.py
+    ├── test_rag_documents.py
+    └── test_guardrails.py
 ```
 
 ---
 
-## Planned Workflow
+## Environment Variables
 
-### Step 1: Ingest Market Data
+Create a local `.env` file using `.env.example` as a template.
 
-Download historical prices for NIFTY 50, SENSEX, and selected Indian listed companies.
+Required variables:
 
-### Step 2: Clean and Prepare Data
+```env
+# Data provider selection
+DATA_PROVIDER=zerodha
 
-Clean missing values, standardize columns, and prepare stock-level and index-level datasets.
+# Zerodha Kite Connect
+KITE_API_KEY=your_kite_api_key_here
+KITE_API_SECRET=your_kite_api_secret_here
+KITE_ACCESS_TOKEN=your_daily_access_token_here
 
-### Step 3: Create Features
+# Groww API
+GROWW_API_KEY=your_groww_api_key_here
 
-Generate technical and statistical features such as returns, volatility, moving averages, RSI, MACD, and drawdown.
+# NSE / BSE licensed data provider
+NSE_BSE_API_KEY=your_exchange_or_vendor_api_key_here
+NSE_BSE_API_BASE_URL=your_exchange_or_vendor_base_url_here
 
-### Step 4: Train Forecasting Model
-
-Train a machine learning model to classify each stock's 18-month outlook as bullish, neutral, or bearish.
-
-### Step 5: Generate Research Documents
-
-Convert stock metrics, forecasts, risks, and model outputs into readable stock research summaries.
-
-### Step 6: Build Vector Store
-
-Create embeddings from the research documents and store them in ChromaDB.
-
-### Step 7: Build Q&A Chatbot
-
-Use retrieval and an LLM to answer user questions using the most relevant stock research documents.
-
-### Step 8: Evaluate the Assistant
-
-Evaluate retrieval quality, answer groundedness, disclaimer presence, and hallucination risk.
-
----
-
-## Example Assistant Behavior
-
-Example question:
-
-```text
-What is the 18-month outlook for Reliance?
+# LLM provider
+OPENAI_API_KEY=your_openai_api_key_here
 ```
 
-Example answer style:
+Never commit real API keys or access tokens.
 
-```text
-Reliance shows a neutral research signal based on the current model features.
+---
 
-The retrieved context shows moderate momentum, stable long-term moving average behavior, and medium volatility. The 18-month model label is Neutral.
+## Tech Stack
 
-This is not financial advice. This project is for educational and research purposes only.
+### Core
+
+- Python
+- pandas
+- NumPy
+- scikit-learn
+- pydantic
+- PyYAML
+- python-dotenv
+- joblib
+
+### Market Data
+
+- Zerodha Kite Connect
+- Groww API
+- NSE/BSE licensed data provider interface
+
+### ML and Evaluation
+
+- scikit-learn
+- MLflow
+- Walk-forward validation
+- Backtesting
+
+### RAG and LLM
+
+- LangChain
+- ChromaDB
+- OpenAI API
+- tiktoken
+
+### Testing and Quality
+
+- pytest
+- Great Expectations
+
+---
+
+## Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/YOUR_USERNAME/nifty-sensex-ai-research-assistant.git
+cd nifty-sensex-ai-research-assistant
 ```
 
+Create and activate a virtual environment:
+
+```bash
+python -m venv .venv
+```
+
+On macOS/Linux:
+
+```bash
+source .venv/bin/activate
+```
+
+On Windows:
+
+```bash
+.venv\Scripts\activate
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Create a local environment file:
+
+```bash
+cp .env.example .env
+```
+
+Then fill in the required API keys and access tokens.
+
 ---
 
-## Responsible AI and Financial Safety
+## Current Status
 
-The assistant must follow these rules:
+Phase 1: Production repo reset in progress.
 
-- Do not provide financial advice.
-- Do not give direct buy, sell, or hold instructions.
-- Do not guarantee future returns.
-- Do not present model outputs as certainty.
-- Always explain that results are educational research summaries.
-- Use only retrieved context when answering stock-specific questions.
+Completed:
+
+- GitHub repository created
+- Initial project structure added
+- Production-only data strategy defined
+- Production data provider scope selected
+
+Next:
+
+- Add production configuration layer
+- Add market data provider interface
+- Add Zerodha Kite Connect client
+- Add Groww client placeholder
+- Add NSE/BSE licensed data client placeholder
 
 ---
 
-## Project Status
+## Responsible AI and Financial Disclaimer
 
-Current status:
+This project is for educational and portfolio purposes only.
 
-- Repository created
-- README drafted
-- Project scope defined
-- Planned structure defined
+The assistant does not provide financial advice, investment recommendations, or buy/sell signals.
 
-Next steps:
+The model outputs are research signals based on historical data, technical features, and retrieved context. They are not guarantees of future performance.
 
-- Add `requirements.txt`
-- Add `.env.example`
-- Add `.gitignore`
-- Create folder structure
-- Build the data ingestion notebook
+Users should consult a qualified financial professional before making investment decisions.
